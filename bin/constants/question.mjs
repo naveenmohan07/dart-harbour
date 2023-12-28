@@ -26,12 +26,6 @@ const QUESTIONS = {
       message: "Project Name",
       default: 'sam'
     },
-    {
-      type: 'input',
-      name: 'projPath',
-      message: "Project Path",
-      default: '/Users/presidio/poc/template-creator'
-    },
   ],
   NEED_PACKAGE: [
     {
