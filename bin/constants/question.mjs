@@ -49,8 +49,9 @@ const QUESTIONS = {
   ],
   GET_PACKAGE_DETAILS: {
     PACKAGE_COUNT: {
-      type: 'input',
+      type: 'number',
       name: 'packageCount',
+      default: 1,
       message: "How many pacakges need to be created??",
     }, 
     PACAKGE_NAME: {

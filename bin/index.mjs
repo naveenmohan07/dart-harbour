@@ -29,6 +29,31 @@ const getNeedTemplate = () => {
         .prompt(QUESTIONS.NEED_TEMPLATE)
 }
 
+// creates folder and file structures in parent and packages
+const createFiles = (type, path, packageName) => {
+    ROOT_TEMPLATE.forEach((folder) => {
+        if(folder.type === type) {
+            exe.exec(`mkdir ${folder.folderName}`, { cwd: `${path}/${folder.path}` }, (error, stdout, stderr) => {
+                if (stdout)
+                    console.log(`after cd ${stdout}`)
+                if(folder.files != null) {
+                  folder.files.forEach((file) => {
+                        console.log(`inside create file => ${type} === ${path} `)
+                        fs.writeFileSync(`${path}/${file.path}/${file.fileName}`, file.content, 'utf-8');
+                        if(folder.type === 'child') {
+                            console.log("inside child check")
+                            if(packageName != null) {
+                                console.log("inside child package name not null")
+                                exportPackageFiles(`${path}/lib/${packageName}.dart`,`${file.exportFrom}/${file.fileName}`, packageName)
+                            }                            
+                        }
+                   })
+                }
+            })
+        }
+    })
+}
+
 // creates flutter project with custom template
 const createWithTemplate = async () => {
     let projDetails = await inquirer.prompt(QUESTIONS.GET_PROJECT_DETAILS).then((name) => name);
@@ -39,6 +64,7 @@ const createWithTemplate = async () => {
         exe.exec(`flutter create ${projDetails.projName}`, (error, stdout, stderr) => {
             if (stdout)
                 console.log(`flutter create: ${stdout}`);
+                createFiles('root', projectName);
             createPacakges();
             if (error)
                 console.log(`flutter create - error: ${error}`);
@@ -111,11 +137,68 @@ const askPacakgeName = () => {
 // creates packages under package folder
 const createPacakge = (packageName) => {
     exe.exec(`flutter create --template=package ${packageName}`, { cwd: `${projectName}/packages` }, (error, stdout, stderr) => {
-        if (stdout)
+        if (stdout) {
+            declareInRootPubSpec(`./${projectName}/pubspec.yaml`, `${packageName}` ,`packages/${packageName}`);
+            createFiles('child', `${projectName}/packages/${packageName}`, packageName);
             console.log(`after cd ${stdout}`)
+        }
         askPacakgeName();
     })
 }
+
+const declareInRootPubSpec = (pubspecPath, packageName, packagePath) => {
+    console.log("PUBSPEC PATH => ", pubspecPath)
+    fs.readFile(pubspecPath, 'utf8', (err, data) => {
+        if (err) {
+            console.error(`Error reading file: ${err.message}`);
+            return;
+        }
+
+        const dependenciesEndIndex = data.indexOf('dependencies:') + 'dependencies:'.length;
+
+        if (dependenciesEndIndex !== -1) {
+            const modifiedContent = data.slice(0, dependenciesEndIndex) +
+                `\n  ${packageName}:\n    path: ${packagePath}\n` +
+                data.slice(dependenciesEndIndex);
+
+            fs.writeFile(pubspecPath, modifiedContent, 'utf8', (err) => {
+                if (err) {
+                    console.error(`Error writing file: ${err.message}`);
+                } else {
+                    console.log('Line inserted successfully.');
+                }
+            });
+        }
+    });
+}
+
+const exportPackageFiles = (rootFilePath, needToExport, packageName) => {
+    console.log("PUBSPEC PATH => ", rootFilePath)
+    fs.readFile(rootFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error(`Error reading file: ${err.message}`);
+            return;
+        }
+
+        const dependenciesEndIndex = data.indexOf(`library ${packageName};`) + `library ${packageName};`.length;
+
+        if (dependenciesEndIndex !== -1) {
+            const modifiedContent = data.slice(0, dependenciesEndIndex) +
+                `\nexport "${needToExport}";` +
+                data.slice(dependenciesEndIndex);
+
+            fs.writeFile(rootFilePath, modifiedContent, 'utf8', (err) => {
+                if (err) {
+                    console.error(`Error writing file: ${err.message}`);
+                } else {
+                    console.log('Line inserted successfully.');
+                }
+            });
+        }
+    });
+}
+
+
 
 
 wrapper();
