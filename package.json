@@ -4,8 +4,9 @@
   "description": "Used to create a starter template for flutter application",
   "main": "./bin/index.mjs",
   "bin": {
-    "rii": "./bin/index.mjs",
-    "gen-package":"./bin/package.mjs"
+    "gen-project": "./bin/index.mjs",
+    "gen-package":"./bin/package.mjs",
+    "install-dependencies": "./bin/dependency.mjs"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

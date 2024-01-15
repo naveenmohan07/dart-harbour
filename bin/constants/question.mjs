@@ -59,7 +59,18 @@ const QUESTIONS = {
       name: 'packageName',
       message: "Please provide name for the pacakges",
     },
-  }
+  },
+  GET_DEPENDENCY: {
+    type: 'input',
+    name: 'depedency',
+    message: 'Enter depedency name to install',
+  },
+  SELECT_PACKAGE: (subfolders) => ({
+    type: 'checkbox',
+    name: 'packages',
+    message: 'Select one or more pacakges to install dependencies',
+    choices: subfolders,
+  }),
 }
 
 export default QUESTIONS;
