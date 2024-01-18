@@ -10,6 +10,14 @@ import { createPacakges } from './shared.mjs';
 
 var projectName = '';
 
+const checkFlutter = () => {
+    exe.exec('which flutter', (error, stdout, stderr) => {
+        if(stdout)
+            wrapper();
+        if(error)
+            console.log("Flutter not install in your machine")
+    });
+}
 
 async function wrapper() {
 
@@ -94,4 +102,4 @@ const createWithoutTemplate = async () => {
     }
 }
 
-wrapper();
+checkFlutter();

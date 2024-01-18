@@ -37,6 +37,7 @@ const createPacakges = async (projectName) => {
         console.log("Going with project creation flow")
     let needPackage = await getNeedPackage().then((res) => res.needPackage)
     if (needPackage) {
+        updateProjectName(projectName);
         createPacakgeFolder();
     }
     }
