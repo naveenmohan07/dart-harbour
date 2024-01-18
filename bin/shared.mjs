@@ -72,6 +72,7 @@ const createPacakge = (packageName) => {
         if (stdout) {
             fileWriter(`./${projectName}/pubspec.yaml`, 'dependencies:', `\n  ${packageName}:\n    path: packages/${packageName}\n`);
             createFiles('child', `${projectName}/packages/${packageName}`, packageName);
+            writeIntoConfig(packageName, `packages/${packageName}`)
             console.log(`after cd ${stdout}`)
         }
         askPacakgeName();
@@ -124,6 +125,18 @@ const createFiles = (type, path, packageName) => {
             })
         }
     })
+}
+
+const writeIntoConfig = (packageName, packagePath) => {
+    console.log("inside write config")
+    const config = JSON.parse(fs.readFileSync('bin/constants/package.config.json', 'utf8'));
+
+    config.packages = config.packages.concat({
+        "name": packageName,
+        "path": packagePath,
+    })
+
+    fs.writeFileSync('bin/constants/package.config.json', JSON.stringify(config, null, 2))
 }
 
 

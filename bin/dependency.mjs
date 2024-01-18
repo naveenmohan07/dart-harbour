@@ -6,12 +6,11 @@ import QUESTIONS from './constants/question.mjs';
 
 // get package list
 const getPackages = (packagePath) => {
-    if (fs.existsSync(packagePath)) {
-        return fs.readdirSync(packagePath, { withFileTypes: true })
-            .filter(dirent => dirent.isDirectory())
-            .map(dirent => dirent.name);
-    } else {
+    const config = JSON.parse(fs.readFileSync('../bin/constants/package.config.json', 'utf8'));
+    if(config.packages.length === 0) {
         return [];
+    } else {
+        return config.packages.map(packag => packag.name)
     }
 }
 
