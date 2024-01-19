@@ -5,7 +5,7 @@
   "main": "./bin/index.mjs",
   "bin": {
     "gen-project": "./bin/index.mjs",
-    "gen-package":"./bin/package.mjs",
+    "gen-package": "./bin/package.mjs",
     "install-dependencies": "./bin/dependency.mjs"
   },
   "scripts": {
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "child_process": "^1.0.2",
-    "inquirer": "^9.2.12"
+    "inquirer": "^9.2.12",
+    "ora": "^8.0.1"
   }
 }

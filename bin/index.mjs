@@ -5,16 +5,15 @@ import QUESTIONS from './constants/question.mjs';
 import ROOT_TEMPLATE from './constants/template.mjs'
 import * as fs from 'fs';
 import * as exe from 'child_process';
-import { createPacakges } from './shared.mjs';
-
+import { createPacakges, startLoader, completeLoader } from './shared.mjs';
 
 var projectName = '';
 
 const checkFlutter = () => {
     exe.exec('which flutter', (error, stdout, stderr) => {
-        if(stdout)
+        if (stdout)
             wrapper();
-        if(error)
+        if (error)
             console.log("Flutter not install in your machine")
     });
 }
@@ -40,19 +39,19 @@ const getNeedTemplate = () => {
 // creates folder and file structures in parent and packages
 const createFiles = (type, path, packageName) => {
     ROOT_TEMPLATE.forEach((folder) => {
-        if(folder.type === type) {
+        if (folder.type === type) {
             exe.exec(`mkdir ${folder.folderName}`, { cwd: `${path}/${folder.path}` }, (error, stdout, stderr) => {
                 if (stdout)
                     console.log(`after cd ${stdout}`)
-                if(folder.files != null) {
-                  folder.files.forEach((file) => {
+                if (folder.files != null) {
+                    folder.files.forEach((file) => {
                         fs.writeFileSync(`${path}/${file.path}/${file.fileName}`, file.content, 'utf-8');
-                        if(folder.type === 'child') {
-                            if(packageName != null) {
-                                fileWriter(`${path}/lib/${packageName}.dart`,`library ${packageName};`,`\nexport "${file.exportFrom}/${file.fileName}";`)
-                            }                            
+                        if (folder.type === 'child') {
+                            if (packageName != null) {
+                                fileWriter(`${path}/lib/${packageName}.dart`, `library ${packageName};`, `\nexport "${file.exportFrom}/${file.fileName}";`)
+                            }
                         }
-                   })
+                    })
                 }
             })
         }
@@ -66,10 +65,12 @@ const createWithTemplate = async () => {
     console.log("Create with template", fs.existsSync(`${projDetails.projName}`))
     if (!fs.existsSync(`${projDetails.projName}`)) {
         console.log("Create with template - inside if");
+        startLoader("Creating Flutte Project.")
         exe.exec(`flutter create ${projDetails.projName}`, (error, stdout, stderr) => {
             if (stdout)
                 console.log(`flutter create: ${stdout}`);
-                createFiles('root', projectName);
+                completeLoader("Project created");
+            createFiles('root', projectName);
             createPacakges(projectName);
             if (error)
                 console.log(`flutter create - error: ${error}`);
@@ -101,5 +102,6 @@ const createWithoutTemplate = async () => {
         });
     }
 }
+
 
 checkFlutter();

@@ -3,11 +3,12 @@ import ROOT_TEMPLATE from './constants/template.mjs'
 import QUESTIONS from './constants/question.mjs';
 import * as fs from 'fs';
 import * as exe from 'child_process';
-
+import ora from 'ora';
 
 var output = [];
 var packageCount = 0;
-var projectName = ""
+var projectName = "";
+const spinner = ora();
 
 // ask package from user
 const getNeedPackage = () => {
@@ -68,11 +69,13 @@ const askPacakgeName = () => {
 
 // creates packages under package folder
 const createPacakge = (packageName) => {
+    startLoader("Creating Packages and Mappings.")
     exe.exec(`flutter create --template=package ${packageName}`, { cwd: `${projectName}/packages` }, (error, stdout, stderr) => {
         if (stdout) {
             fileWriter(`./${projectName}/pubspec.yaml`, 'dependencies:', `\n  ${packageName}:\n    path: packages/${packageName}\n`);
             createFiles('child', `${projectName}/packages/${packageName}`, packageName);
             writeIntoConfig(packageName, `packages/${packageName}`)
+            completeLoader("Packages created.")
             console.log(`after cd ${stdout}`)
         }
         askPacakgeName();
@@ -128,17 +131,26 @@ const createFiles = (type, path, packageName) => {
 }
 
 const writeIntoConfig = (packageName, packagePath) => {
-    console.log("inside write config")
-    const config = JSON.parse(fs.readFileSync('bin/constants/package.config.json', 'utf8'));
+    const config = JSON.parse(fs.readFileSync('sam/.config/package.config.json', 'utf8'));
 
     config.packages = config.packages.concat({
         "name": packageName,
         "path": packagePath,
     })
 
-    fs.writeFileSync('bin/constants/package.config.json', JSON.stringify(config, null, 2))
+    fs.writeFileSync('sam/.config/package.config.json', JSON.stringify(config, null, 2))
 }
 
+const startLoader = (loaderText) => {
+    spinner.start(loaderText)
+}
 
+const completeLoader = (loaderText) => {
+    spinner.succeed(loaderText);
+}
 
-export {createPacakges, createFiles}
+const errorLoader = (loaderText) => {
+    spinner.fail(loaderText);
+}
+
+export {createPacakges, createFiles, startLoader, completeLoader, errorLoader}

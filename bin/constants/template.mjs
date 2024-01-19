@@ -4,6 +4,18 @@ const ROOT_TEMPLATE = [
     path: "",
     type: "root"
   },
+  {
+    folderName: ".config",
+    path: "",
+    type: "root",
+    files: [{
+      fileName: "package.config.json",
+      path: ".config",
+      content: `{
+        "packages": []
+      }`
+    }]
+  },
     {
         folderName: "screens",
         path: "lib",
