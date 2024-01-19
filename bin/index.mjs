@@ -5,7 +5,7 @@ import QUESTIONS from './constants/question.mjs';
 import ROOT_TEMPLATE from './constants/template.mjs'
 import * as fs from 'fs';
 import * as exe from 'child_process';
-import { createPacakges, startLoader, completeLoader } from './shared.mjs';
+import { createPacakges, startLoader, completeLoader, updateGitignore } from './shared.mjs';
 
 var projectName = '';
 
@@ -69,8 +69,9 @@ const createWithTemplate = async () => {
         exe.exec(`flutter create ${projDetails.projName}`, (error, stdout, stderr) => {
             if (stdout)
                 console.log(`flutter create: ${stdout}`);
-                completeLoader("Project created");
+            completeLoader("Project created");
             createFiles('root', projectName);
+            updateGitignore(projectName, ".config");
             createPacakges(projectName);
             if (error)
                 console.log(`flutter create - error: ${error}`);
@@ -82,7 +83,6 @@ const createWithTemplate = async () => {
         console.log(`project already exists`);
         createPacakges(projectName);
     }
-
 }
 
 // creates default flutter project
@@ -102,6 +102,5 @@ const createWithoutTemplate = async () => {
         });
     }
 }
-
 
 checkFlutter();

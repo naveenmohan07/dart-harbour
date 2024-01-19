@@ -29,20 +29,40 @@ const updateProjectName = (projName) => {
 
 // creates package
 const createPacakges = async (projectName) => {
-    if(projectName == null) {
+    if (projectName == null) {
         console.log("Going with package creation flow")
         let projectDetails = await getProjectName().then((res) => res)
         updateProjectName(projectDetails.projName)
         createPacakgeFolder();
     } else {
         console.log("Going with project creation flow")
-    let needPackage = await getNeedPackage().then((res) => res.needPackage)
-    if (needPackage) {
-        updateProjectName(projectName);
-        createPacakgeFolder();
-    }
+        let needPackage = await getNeedPackage().then((res) => res.needPackage)
+        if (needPackage === 'withPackage') {
+            updateProjectName(projectName);
+            createPacakgeFolder();
+        }
     }
 }
+
+const updateGitignore = (projectName, lineToAdd) => {
+    fs.readFile(`${projectName}/.gitignore`, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        const newData = `${data.trim()}\n${lineToAdd}\n`;
+
+        fs.writeFile(`${projectName}/.gitignore`, newData, 'utf8', (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+        });
+    });
+
+}
+
 
 // creates packages folder
 const createPacakgeFolder = () => {
@@ -111,19 +131,19 @@ const fileWriter = (pubspecPath, searchTerm, contentToWrite) => {
 // creates folder and file structures in parent and packages
 const createFiles = (type, path, packageName) => {
     ROOT_TEMPLATE.forEach((folder) => {
-        if(folder.type === type) {
+        if (folder.type === type) {
             exe.exec(`mkdir ${folder.folderName}`, { cwd: `${path}/${folder.path}` }, (error, stdout, stderr) => {
                 if (stdout)
                     console.log(`after cd ${stdout}`)
-                if(folder.files != null) {
-                  folder.files.forEach((file) => {
+                if (folder.files != null) {
+                    folder.files.forEach((file) => {
                         fs.writeFileSync(`${path}/${file.path}/${file.fileName}`, file.content, 'utf-8');
-                        if(folder.type === 'child') {
-                            if(packageName != null) {
-                                fileWriter(`${path}/lib/${packageName}.dart`,`library ${packageName};`,`\nexport "${file.exportFrom}/${file.fileName}";`)
-                            }                            
+                        if (folder.type === 'child') {
+                            if (packageName != null) {
+                                fileWriter(`${path}/lib/${packageName}.dart`, `library ${packageName};`, `\nexport "${file.exportFrom}/${file.fileName}";`)
+                            }
                         }
-                   })
+                    })
                 }
             })
         }
@@ -153,4 +173,4 @@ const errorLoader = (loaderText) => {
     spinner.fail(loaderText);
 }
 
-export {createPacakges, createFiles, startLoader, completeLoader, errorLoader}
+export { createPacakges, createFiles, startLoader, completeLoader, errorLoader, updateGitignore }
