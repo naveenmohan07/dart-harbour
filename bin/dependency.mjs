@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import inquirer from 'inquirer';
 import * as exe from 'child_process';
 import QUESTIONS from './constants/question.mjs';
-import { errorLoader } from './shared.mjs';
+import { errorLoader, completeLoader } from './shared.mjs';
 
 // get package list
 const getPackages = (packagePath) => {
@@ -26,7 +26,7 @@ const selectPackage = async () => {
     const packages = getPackages(folderPath);
     if (packages) {
         if (packages.length === 0) {
-            console.log('No packages found. Please move to projrct root folder!');
+            errorLoader('No packages found. Please move to projrct root folder!');
             return;
         }
 
@@ -46,7 +46,7 @@ const installDependency = async (selectedPackages) => {
     const depedencyName = await getDependency().then((data) => data.depedency);
     for (let packageIndex in selectedPackages) {
         exe.exec(`flutter pub add ${depedencyName}`, { cwd: `packages/${selectedPackages[packageIndex]}` }, (error, stdout, stderr) => {
-            console.log("Package successfully installed on", selectedPackages[packageIndex])
+            completeLoader(`Package successfully installed on selectedPackages[packageIndex]`)
         })
     }
 }

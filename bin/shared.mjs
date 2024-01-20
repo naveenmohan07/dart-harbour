@@ -30,12 +30,10 @@ const updateProjectName = (projName) => {
 // creates package
 const createPacakges = async (projectName) => {
     if (projectName == null) {
-        console.log("Going with package creation flow")
         let projectDetails = await getProjectName().then((res) => res)
         updateProjectName(projectDetails.projName)
         createPacakgeFolder();
     } else {
-        console.log("Going with project creation flow")
         let needPackage = await getNeedPackage().then((res) => res.needPackage)
         if (needPackage === 'withPackage') {
             updateProjectName(projectName);
@@ -47,7 +45,7 @@ const createPacakges = async (projectName) => {
 const updateGitignore = (projectName, lineToAdd) => {
     fs.readFile(`${projectName}/.gitignore`, 'utf8', (err, data) => {
         if (err) {
-            console.error(err);
+            errorLoader(err);
             return;
         }
 
@@ -55,7 +53,7 @@ const updateGitignore = (projectName, lineToAdd) => {
 
         fs.writeFile(`${projectName}/.gitignore`, newData, 'utf8', (err) => {
             if (err) {
-                console.error(err);
+                errorLoader(err);
                 return;
             }
         });
@@ -67,8 +65,6 @@ const updateGitignore = (projectName, lineToAdd) => {
 // creates packages folder
 const createPacakgeFolder = () => {
     exe.exec(`mkdir ${projectName}/packages`, (error, stdout, stderr) => {
-        if (stdout)
-            console.log(`after cd ${stdout}`);
         inquirer.prompt(QUESTIONS.GET_PACKAGE_DETAILS.PACKAGE_COUNT).then((answers) => {
             packageCount = answers.packageCount;
             askPacakgeName()
@@ -96,7 +92,13 @@ const createPacakge = (packageName) => {
             createFiles('child', `${projectName}/packages/${packageName}`, packageName);
             writeIntoConfig(packageName, `packages/${packageName}`)
             completeLoader("Packages created.")
-            console.log(`after cd ${stdout}`)
+        }
+        if(error) {
+            console.log("ERROR => ", error)
+        }
+        if(stderr) {
+            console.log("STDERR => ", stderr)
+            errorLoader(stderr)
         }
         askPacakgeName();
     })
@@ -106,7 +108,7 @@ const createPacakge = (packageName) => {
 const fileWriter = (pubspecPath, searchTerm, contentToWrite) => {
     fs.readFile(pubspecPath, 'utf8', (err, data) => {
         if (err) {
-            console.error(`Error reading file: ${err.message}`);
+            errorLoader(`Error reading file: ${err.message}`);
             return;
         }
 
@@ -119,9 +121,7 @@ const fileWriter = (pubspecPath, searchTerm, contentToWrite) => {
 
             fs.writeFile(pubspecPath, modifiedContent, 'utf8', (err) => {
                 if (err) {
-                    console.error(`Error writing file: ${err.message}`);
-                } else {
-                    console.log('Line inserted successfully.');
+                    errorLoader(`Error writing file: ${err.message}`);
                 }
             });
         }
@@ -133,8 +133,6 @@ const createFiles = (type, path, packageName) => {
     ROOT_TEMPLATE.forEach((folder) => {
         if (folder.type === type) {
             exe.exec(`mkdir ${folder.folderName}`, { cwd: `${path}/${folder.path}` }, (error, stdout, stderr) => {
-                if (stdout)
-                    console.log(`after cd ${stdout}`)
                 if (folder.files != null) {
                     folder.files.forEach((file) => {
                         fs.writeFileSync(`${path}/${file.path}/${file.fileName}`, file.content, 'utf-8');

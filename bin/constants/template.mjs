@@ -62,7 +62,8 @@ const ROOT_TEMPLATE = [
     },
     {
       folderName: "constants",
-      type: "child"
+      type: "child",
+      path: "lib",
     },
     {
       folderName: "screens",
@@ -91,18 +92,22 @@ const ROOT_TEMPLATE = [
     },
     {
       folderName: "services",
+      path: "lib",
       type: "child"
     },
     {
       folderName: "utils",
+      path: "lib",
       type: "child"
     },
     {
       folderName: "widgets",
+      path: "lib",
       type: "child"
     },
     {
       folderName: "types",
+      path: "lib",
       type: "child"
     }
 ];
