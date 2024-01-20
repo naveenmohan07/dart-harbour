@@ -46,7 +46,7 @@ const installDependency = async (selectedPackages) => {
     const depedencyName = await getDependency().then((data) => data.depedency);
     for (let packageIndex in selectedPackages) {
         exe.exec(`flutter pub add ${depedencyName}`, { cwd: `packages/${selectedPackages[packageIndex]}` }, (error, stdout, stderr) => {
-            completeLoader(`Package successfully installed on selectedPackages[packageIndex]`)
+            completeLoader(`Package successfully installed on ${selectedPackages[packageIndex]}`)
         })
     }
 }
