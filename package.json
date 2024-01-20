@@ -1,0 +1,22 @@
+{
+  "name": "template-creator",
+  "version": "1.0.0",
+  "description": "Used to create a starter template for flutter application",
+  "main": "./bin/index.mjs",
+  "bin": {
+    "gen-project": "./bin/index.mjs",
+    "gen-package": "./bin/package.mjs",
+    "install-dependencies": "./bin/dependency.mjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "do": "node ./bin/package.mjs"
+  },
+  "author": "Naveen Mohan",
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "inquirer": "^9.2.12",
+    "ora": "^8.0.1"
+  }
+}
