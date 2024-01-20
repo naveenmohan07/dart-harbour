@@ -5,7 +5,7 @@ import QUESTIONS from './constants/question.mjs';
 import ROOT_TEMPLATE from './constants/template.mjs'
 import * as fs from 'fs';
 import * as exe from 'child_process';
-import { createPacakges, startLoader, completeLoader, updateGitignore } from './shared.mjs';
+import { createPacakges, startLoader, completeLoader, updateGitignore, errorLoader } from './shared.mjs';
 
 var projectName = '';
 
@@ -14,7 +14,7 @@ const checkFlutter = () => {
         if (stdout)
             wrapper();
         if (error)
-            console.log("Flutter not install in your machine")
+            errorLoader("Flutter not install in your machine")
     });
 }
 
@@ -41,8 +41,6 @@ const createFiles = (type, path, packageName) => {
     ROOT_TEMPLATE.forEach((folder) => {
         if (folder.type === type) {
             exe.exec(`mkdir ${folder.folderName}`, { cwd: `${path}/${folder.path}` }, (error, stdout, stderr) => {
-                if (stdout)
-                    console.log(`after cd ${stdout}`)
                 if (folder.files != null) {
                     folder.files.forEach((file) => {
                         fs.writeFileSync(`${path}/${file.path}/${file.fileName}`, file.content, 'utf-8');
@@ -62,25 +60,22 @@ const createFiles = (type, path, packageName) => {
 const createWithTemplate = async () => {
     let projDetails = await inquirer.prompt(QUESTIONS.GET_PROJECT_DETAILS).then((name) => name);
     projectName = projDetails.projName;
-    console.log("Create with template", fs.existsSync(`${projDetails.projName}`))
     if (!fs.existsSync(`${projDetails.projName}`)) {
-        console.log("Create with template - inside if");
-        startLoader("Creating Flutte Project.")
+        startLoader("Creating Flutter Project.")
         exe.exec(`flutter create ${projDetails.projName}`, (error, stdout, stderr) => {
             if (stdout)
-                console.log(`flutter create: ${stdout}`);
-            completeLoader("Project created");
-            createFiles('root', projectName);
-            updateGitignore(projectName, ".config");
-            createPacakges(projectName);
+                completeLoader("Project created");
+                createFiles('root', projectName);
+                updateGitignore(projectName, ".config");
+                createPacakges(projectName);
             if (error)
-                console.log(`flutter create - error: ${error}`);
+                errorLoader(`flutter create - error: ${error}`);
             if (stderr)
-                console.log(`flutter create - stderr: ${stderr}`);
+                errorLoader(`flutter create - stderr: ${stderr}`);
         });
 
     } else {
-        console.log(`project already exists`);
+        completeLoader("Project already exist");
         createPacakges(projectName);
     }
 }
@@ -91,14 +86,13 @@ const createWithoutTemplate = async () => {
     if (!fs.existsSync(`${projDetails.projName}`)) {
         exe.exec("cd ", (error, stdout, stderr) => {
             if (error) {
-                console.log(`error: ${error.message}`);
+                errorLoader(`error: ${error.message}`);
                 return;
             }
             if (stderr) {
-                console.log(`stderr: ${stderr}`);
+                errorLoader(`stderr: ${stderr}`);
                 return;
             }
-            console.log(`stdout: ${stdout}`);
         });
     }
 }
