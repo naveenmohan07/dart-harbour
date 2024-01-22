@@ -4,8 +4,6 @@
 The Template Creator empowers you to generate a Flutter project from scratch, complete with the necessary folder hierarchy and package segmentation as per your specified mapping. It additionally provides the feature to seamlessly install dependencies for the designated package with a single command.
 
 
-
-
 ## Features
 
 - Create Flutter project with/without template
@@ -36,7 +34,7 @@ Install dependencies globally
 Try out the commands
 
 ```bash
-  gen-project
+  fluttersnap
 ```
 
 
@@ -45,18 +43,18 @@ Try out the commands
 Create Project with/without template
 
 ```bash
-  gen-project
+  fluttersnap
 ```
 Create Packages for the project
 
 ```bash
-  gen-packages
+  packify
 ```
 
 Install dependency for the specified package
 
 ```bash
-  install-dependencies
+  fastfuse
 ```
 ## Version
-- 1.0.0
+- 1.0.2
