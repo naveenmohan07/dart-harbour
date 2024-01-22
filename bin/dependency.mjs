@@ -24,7 +24,9 @@ const getPackages = (packagePath) => {
 const selectPackage = async () => {
     const folderPath = 'packages';
     const packages = getPackages(folderPath);
-    if (packages) {
+    console.log("inside package check => ", packages)
+    if (packages != null) {
+        console.log("inside package ", packages)
         if (packages.length === 0) {
             errorLoader('No packages found. Please move to projrct root folder!');
             return;
@@ -32,6 +34,8 @@ const selectPackage = async () => {
 
         const selectedPackages = await inquirer.prompt(QUESTIONS.SELECT_PACKAGE(packages));
         installDependency(selectedPackages.packages)
+    } else {
+        return;
     }
 }
 
@@ -52,4 +56,4 @@ const installDependency = async (selectedPackages) => {
 }
 
 
-selectPackage();
+export { selectPackage }
