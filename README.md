@@ -10,6 +10,8 @@ The Template Creator empowers you to generate a Flutter project from scratch, co
 - Create Packages
 - Install Dependency
 
+## Version
+- 2.0.0
 
 ## To Run
 
@@ -44,5 +46,9 @@ Install dependency for the specified package
 ```bash
   dh fast-fuse
 ```
-## Version
-- 2.0.0
+
+## Demo
+
+Insert gif or link to demo
+
+![Alt flutter-snap](https://github.com/naveenmohan07/dart-harbour/blob/feature/enable-subcommand/bin/assets/dh-flutter-snap.gif?raw=true)
