@@ -95,6 +95,7 @@ const createPacakge = (packageName) => {
         }
         if(error) {
             console.log("ERROR => ", error)
+            errorLoader(error)
         }
         if(stderr) {
             console.log("STDERR => ", stderr)

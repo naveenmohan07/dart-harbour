@@ -10,31 +10,21 @@ The Template Creator empowers you to generate a Flutter project from scratch, co
 - Create Packages
 - Install Dependency
 
+## Version
+- 2.0.0
 
-## Run Locally
+## To Run
 
-Clone the project
-
-```bash
-  git clone https://link-to-project
-```
-
-Go to the project directory
+Install the package from npm
 
 ```bash
-  cd my-project
-```
-
-Install dependencies globally
-
-```bash
-  npm install -g
+  npm i dart-harbor
 ```
 
 Try out the commands
 
 ```bash
-  fluttersnap
+  dh flutter-snap
 ```
 
 
@@ -43,18 +33,22 @@ Try out the commands
 Create Project with/without template
 
 ```bash
-  fluttersnap
+  dh flutter-snap
 ```
 Create Packages for the project
 
 ```bash
-  packify
+  dh packify
 ```
 
 Install dependency for the specified package
 
 ```bash
-  fastfuse
+  dh fast-fuse
 ```
-## Version
-- 1.0.2
+
+## Demo
+
+Flutter-snap
+
+![Alt flutter-snap](https://github.com/naveenmohan07/dart-harbour/blob/feature/enable-subcommand/bin/assets/dh-flutter-snap.gif?raw=true)
