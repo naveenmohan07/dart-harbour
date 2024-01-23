@@ -49,6 +49,6 @@ Install dependency for the specified package
 
 ## Demo
 
-Insert gif or link to demo
+Flutter-snap
 
 ![Alt flutter-snap](https://github.com/naveenmohan07/dart-harbour/blob/feature/enable-subcommand/bin/assets/dh-flutter-snap.gif?raw=true)
