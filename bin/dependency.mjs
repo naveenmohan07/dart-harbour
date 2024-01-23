@@ -24,9 +24,7 @@ const getPackages = (packagePath) => {
 const selectPackage = async () => {
     const folderPath = 'packages';
     const packages = getPackages(folderPath);
-    console.log("inside package check => ", packages)
     if (packages != null) {
-        console.log("inside package ", packages)
         if (packages.length === 0) {
             errorLoader('No packages found. Please move to projrct root folder!');
             return;
