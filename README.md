@@ -51,4 +51,4 @@ Install dependency for the specified package
 
 Flutter-snap
 
-![Alt flutter-snap](https://github.com/naveenmohan07/dart-harbour/blob/feature/enable-subcommand/bin/assets/dh-flutter-snap.gif?raw=true)
+![Alt flutter-snap](https://github.com/naveenmohan07/dart-harbour/blob/main/bin/assets/dh-flutter-snap.gif?raw=true)
