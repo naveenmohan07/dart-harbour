@@ -11,7 +11,7 @@ The Template Creator empowers you to generate a Flutter project from scratch, co
 - Install Dependency
 
 ## Version
-- 2.0.0
+- 2.0.1
 
 ## To Run
 

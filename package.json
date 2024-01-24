@@ -1,6 +1,6 @@
 {
   "name": "dart-harbor",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Used to create a starter template for flutter application",
   "main": "./bin/index.mjs",
   "bin": {
