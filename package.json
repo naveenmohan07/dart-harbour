@@ -17,5 +17,9 @@
     "commander": "^11.1.0",
     "inquirer": "^9.2.12",
     "ora": "^8.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naveenmohan07/dart-harbour.git"
   }
 }
