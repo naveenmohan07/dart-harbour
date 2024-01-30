@@ -24,7 +24,7 @@ const getPackages = (packagePath) => {
 const selectPackage = async () => {
     const folderPath = 'packages';
     const packages = getPackages(folderPath);
-    if (packages) {
+    if (packages != null) {
         if (packages.length === 0) {
             errorLoader('No packages found. Please move to projrct root folder!');
             return;
@@ -32,6 +32,8 @@ const selectPackage = async () => {
 
         const selectedPackages = await inquirer.prompt(QUESTIONS.SELECT_PACKAGE(packages));
         installDependency(selectedPackages.packages)
+    } else {
+        return;
     }
 }
 
@@ -46,10 +48,10 @@ const installDependency = async (selectedPackages) => {
     const depedencyName = await getDependency().then((data) => data.depedency);
     for (let packageIndex in selectedPackages) {
         exe.exec(`flutter pub add ${depedencyName}`, { cwd: `packages/${selectedPackages[packageIndex]}` }, (error, stdout, stderr) => {
-            completeLoader(`Package successfully installed on selectedPackages[packageIndex]`)
+            completeLoader(`Package successfully installed on ${selectedPackages[packageIndex]}`)
         })
     }
 }
 
 
-selectPackage();
+export { selectPackage }
