@@ -90,14 +90,14 @@ const createPacakge = (packageName) => {
         if (stdout) {
             fileWriter(`./${projectName}/pubspec.yaml`, 'dependencies:', `\n  ${packageName}:\n    path: packages/${packageName}\n`);
             createFiles('child', `${projectName}/packages/${packageName}`, packageName);
-            writeIntoConfig(packageName, `packages/${packageName}`)
+            writeIntoConfig(packageName, `packages/${packageName}`, projectName)
             completeLoader("Packages created.")
         }
-        if(error) {
+        if (error) {
             console.log("ERROR => ", error)
             errorLoader(error)
         }
-        if(stderr) {
+        if (stderr) {
             console.log("STDERR => ", stderr)
             errorLoader(stderr)
         }
@@ -149,15 +149,15 @@ const createFiles = (type, path, packageName) => {
     })
 }
 
-const writeIntoConfig = (packageName, packagePath) => {
-    const config = JSON.parse(fs.readFileSync('sam/.config/package.config.json', 'utf8'));
+const writeIntoConfig = (packageName, packagePath, projectName) => {
+    const config = JSON.parse(fs.readFileSync(`${projectName}/.config/package.config.json`, 'utf8'));
 
     config.packages = config.packages.concat({
         "name": packageName,
         "path": packagePath,
     })
 
-    fs.writeFileSync('sam/.config/package.config.json', JSON.stringify(config, null, 2))
+    fs.writeFileSync(`${projectName}/.config/package.config.json`, JSON.stringify(config, null, 2))
 }
 
 const startLoader = (loaderText) => {
