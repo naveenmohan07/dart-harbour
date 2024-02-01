@@ -50,7 +50,7 @@ Install dependency for the specified package
 Remove dependency for the specified package
 
 ```bash
-  dh purge
+  dh fast-purge
 ```
 
 ## Demo

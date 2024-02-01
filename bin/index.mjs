@@ -19,7 +19,7 @@ cmdr.program.command('packify').description('Creates custom package for existing
     createPacakges();
 })
 
-cmdr.program.command('purge').description('Remove dependency for existing packages').action(() => {
+cmdr.program.command('fast-purge').description('Remove dependency for existing packages').action(() => {
     processDependency(APP_CONSTANT.DEPENDENCY_OPERATION.REMOVE);
 })
 
