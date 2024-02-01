@@ -3,7 +3,8 @@ import * as fs from 'fs';
 import inquirer from 'inquirer';
 import * as exe from 'child_process';
 import QUESTIONS from './constants/question.mjs';
-import { errorLoader, completeLoader } from './shared.mjs';
+import { errorLoader, completeLoader, startLoader } from './shared.mjs';
+import { APP_CONSTANT } from './constants/app.contant.mjs';
 
 // get package list
 const getPackages = (packagePath) => {
@@ -20,8 +21,8 @@ const getPackages = (packagePath) => {
     }
 }
 
-// select package to install dependency
-const selectPackage = async () => {
+// select package to install/delete dependency
+const processDependency = async (operationType) => {
     const folderPath = 'packages';
     const packages = getPackages(folderPath);
     if (packages != null) {
@@ -31,27 +32,41 @@ const selectPackage = async () => {
         }
 
         const selectedPackages = await inquirer.prompt(QUESTIONS.SELECT_PACKAGE(packages));
-        installDependency(selectedPackages.packages)
+        performDependencyAction(selectedPackages.packages, operationType)
     } else {
         return;
     }
 }
 
-// get name of the dependency to install
-const getDependency = async () => {
-    return inquirer.prompt(QUESTIONS.GET_DEPENDENCY);
+// get name of the dependency to install/delete
+const getDependency = async (operationType) => {
+    switch (operationType) {
+        case APP_CONSTANT.DEPENDENCY_OPERATION.INSTALL:
+            return inquirer.prompt(QUESTIONS.GET_DEPENDENCY);
+        case APP_CONSTANT.DEPENDENCY_OPERATION.REMOVE:
+            return inquirer.prompt(QUESTIONS.REMOVE_DEPENDENCY);
+        default:
+            break;
+    }
+    
 }
 
 
-// install the dependency
-const installDependency = async (selectedPackages) => {
-    const depedencyName = await getDependency().then((data) => data.depedency);
+// install/delete the dependency
+const performDependencyAction = async (selectedPackages, operationType) => {
+    const depedencyName = await getDependency(operationType).then((data) => data.depedency);
     for (let packageIndex in selectedPackages) {
-        exe.exec(`flutter pub add ${depedencyName}`, { cwd: `packages/${selectedPackages[packageIndex]}` }, (error, stdout, stderr) => {
-            completeLoader(`Package successfully installed on ${selectedPackages[packageIndex]}`)
+        startLoader(`${APP_CONSTANT.LOADER_MESSAGE[operationType]} ${depedencyName} on package ${selectedPackages[packageIndex]}!!`)
+        exe.exec(`${APP_CONSTANT.DEPENDENCY_COMMANDS[operationType]} ${depedencyName}`, { cwd: `packages/${selectedPackages[packageIndex]}` }, (error, stdout, stderr) => {
+            if(stderr.includes('not found in pubspec.yaml!')) {
+                errorLoader(`Package "${depedencyName}" on ${selectedPackages[packageIndex]} not found!!`)
+            } else if(error !== null) {
+                errorLoader(error.message);
+            } else {
+                completeLoader(`Package successfully ${APP_CONSTANT.PRINT_MESSAGE[operationType]} on ${selectedPackages[packageIndex]}`)
+            }
         })
     }
 }
 
-
-export { selectPackage }
+export { processDependency }
