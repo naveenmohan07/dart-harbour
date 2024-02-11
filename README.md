@@ -11,7 +11,7 @@ The Template Creator empowers you to generate a Flutter project from scratch, co
 - Install Dependency
 
 ## Version
-- 2.0.1
+- 2.2.0
 
 ## To Run
 
@@ -45,6 +45,12 @@ Install dependency for the specified package
 
 ```bash
   dh fast-fuse
+```
+
+Remove dependency for the specified package
+
+```bash
+  dh fast-purge
 ```
 
 ## Demo
