@@ -160,6 +160,19 @@ const writeIntoConfig = (packageName, packagePath, projectName) => {
     fs.writeFileSync(`${projectName}/.config/package.config.json`, JSON.stringify(config, null, 2))
 }
 
+// download existing template
+const cloneBoilerPlate = () => {
+    const child = exe.exec('git clone https://github.com/naveenmohan07/flutter.git');
+    startLoader("Hold on, initializing the cloning process.")
+    child.on('exit', (code) => {
+        if(code === 0) {
+            completeLoader("Example project cloned successfully.")
+        } else {
+            errorLoader("Something went wrong!!")
+        }
+    });
+}
+
 const startLoader = (loaderText) => {
     spinner.start(loaderText)
 }
@@ -172,4 +185,4 @@ const errorLoader = (loaderText) => {
     spinner.fail(loaderText);
 }
 
-export { createPacakges, createFiles, startLoader, completeLoader, errorLoader, updateGitignore }
+export { createPacakges, createFiles, startLoader, completeLoader, errorLoader, updateGitignore, cloneBoilerPlate }
