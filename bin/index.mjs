@@ -2,7 +2,7 @@
 
 import * as cmdr from 'commander';
 import { checkFlutter } from './project.mjs';
-import { createPacakges } from './shared.mjs';
+import { createPacakges, cloneBoilerPlate } from './shared.mjs';
 import { processDependency } from './dependency.mjs';
 import { APP_CONSTANT } from './constants/app.contant.mjs';
 
@@ -21,6 +21,10 @@ cmdr.program.command('packify').description('Creates custom package for existing
 
 cmdr.program.command('fast-purge').description('Remove dependency for existing packages').action(() => {
     processDependency(APP_CONSTANT.DEPENDENCY_OPERATION.REMOVE);
+})
+
+cmdr.program.command('flutter-clone').description('Clone example flutter template with best practices').action(() => {
+    cloneBoilerPlate();
 })
 
 cmdr.program.parse(process.argv);
