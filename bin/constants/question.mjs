@@ -65,6 +65,11 @@ const QUESTIONS = {
     name: 'depedency',
     message: 'Enter depedency name to install',
   },
+  REMOVE_DEPENDENCY: {
+    type: 'input',
+    name: 'depedency',
+    message: 'Enter depedency name to remove',
+  },
   SELECT_PACKAGE: (subfolders) => ({
     type: 'checkbox',
     name: 'packages',
